@@ -1,0 +1,464 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="TechSupportModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityContainer Name="TechSupportModelStoreContainer">
+          <EntitySet Name="Customers" EntityType="TechSupportModel.Store.Customers" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="Incidents" EntityType="TechSupportModel.Store.Incidents" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="Products" EntityType="TechSupportModel.Store.Products" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="Registrations" EntityType="TechSupportModel.Store.Registrations" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="States" EntityType="TechSupportModel.Store.States" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="Technicians" EntityType="TechSupportModel.Store.Technicians" store:Type="Tables" Schema="dbo" />
+          <AssociationSet Name="FK_Incidents_Customers" Association="TechSupportModel.Store.FK_Incidents_Customers">
+            <End Role="Customers" EntitySet="Customers" />
+            <End Role="Incidents" EntitySet="Incidents" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Incidents_Products" Association="TechSupportModel.Store.FK_Incidents_Products">
+            <End Role="Products" EntitySet="Products" />
+            <End Role="Incidents" EntitySet="Incidents" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Incidents_Technicians" Association="TechSupportModel.Store.FK_Incidents_Technicians">
+            <End Role="Technicians" EntitySet="Technicians" />
+            <End Role="Incidents" EntitySet="Incidents" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Registrations_Customers" Association="TechSupportModel.Store.FK_Registrations_Customers">
+            <End Role="Customers" EntitySet="Customers" />
+            <End Role="Registrations" EntitySet="Registrations" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Registrations_Products" Association="TechSupportModel.Store.FK_Registrations_Products">
+            <End Role="Products" EntitySet="Products" />
+            <End Role="Registrations" EntitySet="Registrations" />
+          </AssociationSet>
+          <AssociationSet Name="FK_States_Customers" Association="TechSupportModel.Store.FK_States_Customers">
+            <End Role="States" EntitySet="States" />
+            <End Role="Customers" EntitySet="Customers" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="Customers">
+          <Key>
+            <PropertyRef Name="CustomerID" />
+          </Key>
+          <Property Name="CustomerID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="varchar" Nullable="false" MaxLength="50" />
+          <Property Name="Address" Type="varchar" Nullable="false" MaxLength="50" />
+          <Property Name="City" Type="varchar" Nullable="false" MaxLength="20" />
+          <Property Name="State" Type="char" Nullable="false" MaxLength="2" />
+          <Property Name="ZipCode" Type="varchar" Nullable="false" MaxLength="9" />
+          <Property Name="Phone" Type="varchar" MaxLength="20" />
+          <Property Name="Email" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="Incidents">
+          <Key>
+            <PropertyRef Name="IncidentID" />
+          </Key>
+          <Property Name="IncidentID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="CustomerID" Type="int" Nullable="false" />
+          <Property Name="ProductCode" Type="char" Nullable="false" MaxLength="10" />
+          <Property Name="TechID" Type="int" />
+          <Property Name="DateOpened" Type="datetime" Nullable="false" />
+          <Property Name="DateClosed" Type="datetime" />
+          <Property Name="Title" Type="varchar" Nullable="false" MaxLength="50" />
+          <Property Name="Description" Type="varchar" Nullable="false" MaxLength="2000" />
+        </EntityType>
+        <EntityType Name="Products">
+          <Key>
+            <PropertyRef Name="ProductCode" />
+          </Key>
+          <Property Name="ProductCode" Type="char" Nullable="false" MaxLength="10" />
+          <Property Name="Name" Type="varchar" Nullable="false" MaxLength="50" />
+          <Property Name="Version" Type="decimal" Nullable="false" Scale="1" />
+          <Property Name="ReleaseDate" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Registrations">
+          <Key>
+            <PropertyRef Name="CustomerID" />
+            <PropertyRef Name="ProductCode" />
+          </Key>
+          <Property Name="CustomerID" Type="int" Nullable="false" />
+          <Property Name="ProductCode" Type="char" Nullable="false" MaxLength="10" />
+          <Property Name="RegistrationDate" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="States">
+          <Key>
+            <PropertyRef Name="StateCode" />
+          </Key>
+          <Property Name="StateCode" Type="char" Nullable="false" MaxLength="2" />
+          <Property Name="StateName" Type="varchar" Nullable="false" MaxLength="20" />
+          <Property Name="FirstZipCode" Type="int" Nullable="false" />
+          <Property Name="LastZipCode" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Technicians">
+          <Key>
+            <PropertyRef Name="TechID" />
+          </Key>
+          <Property Name="TechID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="varchar" Nullable="false" MaxLength="50" />
+          <Property Name="Email" Type="varchar" Nullable="false" MaxLength="50" />
+          <Property Name="Phone" Type="varchar" Nullable="false" MaxLength="20" />
+        </EntityType>
+        <Association Name="FK_Incidents_Customers">
+          <End Role="Customers" Type="TechSupportModel.Store.Customers" Multiplicity="1" />
+          <End Role="Incidents" Type="TechSupportModel.Store.Incidents" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Customers">
+              <PropertyRef Name="CustomerID" />
+            </Principal>
+            <Dependent Role="Incidents">
+              <PropertyRef Name="CustomerID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Incidents_Products">
+          <End Role="Products" Type="TechSupportModel.Store.Products" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Incidents" Type="TechSupportModel.Store.Incidents" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Products">
+              <PropertyRef Name="ProductCode" />
+            </Principal>
+            <Dependent Role="Incidents">
+              <PropertyRef Name="ProductCode" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Incidents_Technicians">
+          <End Role="Technicians" Type="TechSupportModel.Store.Technicians" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Incidents" Type="TechSupportModel.Store.Incidents" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Technicians">
+              <PropertyRef Name="TechID" />
+            </Principal>
+            <Dependent Role="Incidents">
+              <PropertyRef Name="TechID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Registrations_Customers">
+          <End Role="Customers" Type="TechSupportModel.Store.Customers" Multiplicity="1" />
+          <End Role="Registrations" Type="TechSupportModel.Store.Registrations" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Customers">
+              <PropertyRef Name="CustomerID" />
+            </Principal>
+            <Dependent Role="Registrations">
+              <PropertyRef Name="CustomerID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Registrations_Products">
+          <End Role="Products" Type="TechSupportModel.Store.Products" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Registrations" Type="TechSupportModel.Store.Registrations" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Products">
+              <PropertyRef Name="ProductCode" />
+            </Principal>
+            <Dependent Role="Registrations">
+              <PropertyRef Name="ProductCode" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_States_Customers">
+          <End Role="States" Type="TechSupportModel.Store.States" Multiplicity="1" />
+          <End Role="Customers" Type="TechSupportModel.Store.Customers" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="States">
+              <PropertyRef Name="StateCode" />
+            </Principal>
+            <Dependent Role="Customers">
+              <PropertyRef Name="State" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="TechSupportModel" Alias="Self" p1:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:p1="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="TechSupportEntities" p1:LazyLoadingEnabled="true">
+          <EntitySet Name="Customers" EntityType="TechSupportModel.Customer" />
+          <EntitySet Name="Incidents" EntityType="TechSupportModel.Incident" />
+          <EntitySet Name="Products" EntityType="TechSupportModel.Product" />
+          <EntitySet Name="Registrations" EntityType="TechSupportModel.Registration" />
+          <EntitySet Name="States" EntityType="TechSupportModel.State" />
+          <EntitySet Name="Technicians" EntityType="TechSupportModel.Technician" />
+          <AssociationSet Name="FK_Incidents_Customers" Association="TechSupportModel.FK_Incidents_Customers">
+            <End Role="Customers" EntitySet="Customers" />
+            <End Role="Incidents" EntitySet="Incidents" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Registrations_Customers" Association="TechSupportModel.FK_Registrations_Customers">
+            <End Role="Customers" EntitySet="Customers" />
+            <End Role="Registrations" EntitySet="Registrations" />
+          </AssociationSet>
+          <AssociationSet Name="FK_States_Customers" Association="TechSupportModel.FK_States_Customers">
+            <End Role="States" EntitySet="States" />
+            <End Role="Customers" EntitySet="Customers" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Incidents_Products" Association="TechSupportModel.FK_Incidents_Products">
+            <End Role="Products" EntitySet="Products" />
+            <End Role="Incidents" EntitySet="Incidents" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Incidents_Technicians" Association="TechSupportModel.FK_Incidents_Technicians">
+            <End Role="Technicians" EntitySet="Technicians" />
+            <End Role="Incidents" EntitySet="Incidents" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Registrations_Products" Association="TechSupportModel.FK_Registrations_Products">
+            <End Role="Products" EntitySet="Products" />
+            <End Role="Registrations" EntitySet="Registrations" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="Customer">
+          <Key>
+            <PropertyRef Name="CustomerID" />
+          </Key>
+          <Property Name="CustomerID" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="Address" Type="String" Nullable="false" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="City" Type="String" Nullable="false" MaxLength="20" Unicode="false" FixedLength="false" />
+          <Property Name="State" Type="String" Nullable="false" MaxLength="2" Unicode="false" FixedLength="true" />
+          <Property Name="ZipCode" Type="String" Nullable="false" MaxLength="9" Unicode="false" FixedLength="false" />
+          <Property Name="Phone" Type="String" MaxLength="20" Unicode="false" FixedLength="false" />
+          <Property Name="Email" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
+          <NavigationProperty Name="Incidents" Relationship="TechSupportModel.FK_Incidents_Customers" FromRole="Customers" ToRole="Incidents" />
+          <NavigationProperty Name="Registrations" Relationship="TechSupportModel.FK_Registrations_Customers" FromRole="Customers" ToRole="Registrations" />
+          <NavigationProperty Name="State1" Relationship="TechSupportModel.FK_States_Customers" FromRole="Customers" ToRole="States" />
+        </EntityType>
+        <EntityType Name="Incident">
+          <Key>
+            <PropertyRef Name="IncidentID" />
+          </Key>
+          <Property Name="IncidentID" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
+          <Property Name="CustomerID" Type="Int32" Nullable="false" />
+          <Property Name="ProductCode" Type="String" Nullable="false" MaxLength="10" Unicode="false" FixedLength="true" />
+          <Property Name="TechID" Type="Int32" />
+          <Property Name="DateOpened" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="DateClosed" Type="DateTime" Precision="3" />
+          <Property Name="Title" Type="String" Nullable="false" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="Description" Type="String" Nullable="false" MaxLength="2000" Unicode="false" FixedLength="false" />
+          <NavigationProperty Name="Customer" Relationship="TechSupportModel.FK_Incidents_Customers" FromRole="Incidents" ToRole="Customers" />
+          <NavigationProperty Name="Product" Relationship="TechSupportModel.FK_Incidents_Products" FromRole="Incidents" ToRole="Products" />
+          <NavigationProperty Name="Technician" Relationship="TechSupportModel.FK_Incidents_Technicians" FromRole="Incidents" ToRole="Technicians" />
+        </EntityType>
+        <EntityType Name="Product">
+          <Key>
+            <PropertyRef Name="ProductCode" />
+          </Key>
+          <Property Name="ProductCode" Type="String" Nullable="false" MaxLength="10" Unicode="false" FixedLength="true" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="Version" Type="Decimal" Nullable="false" Precision="18" Scale="1" />
+          <Property Name="ReleaseDate" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="Incidents" Relationship="TechSupportModel.FK_Incidents_Products" FromRole="Products" ToRole="Incidents" />
+          <NavigationProperty Name="Registrations" Relationship="TechSupportModel.FK_Registrations_Products" FromRole="Products" ToRole="Registrations" />
+        </EntityType>
+        <EntityType Name="Registration">
+          <Key>
+            <PropertyRef Name="CustomerID" />
+            <PropertyRef Name="ProductCode" />
+          </Key>
+          <Property Name="CustomerID" Type="Int32" Nullable="false" />
+          <Property Name="ProductCode" Type="String" Nullable="false" MaxLength="10" Unicode="false" FixedLength="true" />
+          <Property Name="RegistrationDate" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="Customer" Relationship="TechSupportModel.FK_Registrations_Customers" FromRole="Registrations" ToRole="Customers" />
+          <NavigationProperty Name="Product" Relationship="TechSupportModel.FK_Registrations_Products" FromRole="Registrations" ToRole="Products" />
+        </EntityType>
+        <EntityType Name="State">
+          <Key>
+            <PropertyRef Name="StateCode" />
+          </Key>
+          <Property Name="StateCode" Type="String" Nullable="false" MaxLength="2" Unicode="false" FixedLength="true" />
+          <Property Name="StateName" Type="String" Nullable="false" MaxLength="20" Unicode="false" FixedLength="false" />
+          <Property Name="FirstZipCode" Type="Int32" Nullable="false" />
+          <Property Name="LastZipCode" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Customers" Relationship="TechSupportModel.FK_States_Customers" FromRole="States" ToRole="Customers" />
+        </EntityType>
+        <EntityType Name="Technician">
+          <Key>
+            <PropertyRef Name="TechID" />
+          </Key>
+          <Property Name="TechID" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="Email" Type="String" Nullable="false" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="Phone" Type="String" Nullable="false" MaxLength="20" Unicode="false" FixedLength="false" />
+          <NavigationProperty Name="Incidents" Relationship="TechSupportModel.FK_Incidents_Technicians" FromRole="Technicians" ToRole="Incidents" />
+        </EntityType>
+        <Association Name="FK_Incidents_Customers">
+          <End Role="Customers" Type="TechSupportModel.Customer" Multiplicity="1" />
+          <End Role="Incidents" Type="TechSupportModel.Incident" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Customers">
+              <PropertyRef Name="CustomerID" />
+            </Principal>
+            <Dependent Role="Incidents">
+              <PropertyRef Name="CustomerID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Registrations_Customers">
+          <End Role="Customers" Type="TechSupportModel.Customer" Multiplicity="1" />
+          <End Role="Registrations" Type="TechSupportModel.Registration" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Customers">
+              <PropertyRef Name="CustomerID" />
+            </Principal>
+            <Dependent Role="Registrations">
+              <PropertyRef Name="CustomerID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_States_Customers">
+          <End Role="States" Type="TechSupportModel.State" Multiplicity="1" />
+          <End Role="Customers" Type="TechSupportModel.Customer" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="States">
+              <PropertyRef Name="StateCode" />
+            </Principal>
+            <Dependent Role="Customers">
+              <PropertyRef Name="State" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Incidents_Products">
+          <End Role="Products" Type="TechSupportModel.Product" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Incidents" Type="TechSupportModel.Incident" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Products">
+              <PropertyRef Name="ProductCode" />
+            </Principal>
+            <Dependent Role="Incidents">
+              <PropertyRef Name="ProductCode" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Incidents_Technicians">
+          <End Role="Technicians" Type="TechSupportModel.Technician" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Incidents" Type="TechSupportModel.Incident" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Technicians">
+              <PropertyRef Name="TechID" />
+            </Principal>
+            <Dependent Role="Incidents">
+              <PropertyRef Name="TechID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Registrations_Products">
+          <End Role="Products" Type="TechSupportModel.Product" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Registrations" Type="TechSupportModel.Registration" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Products">
+              <PropertyRef Name="ProductCode" />
+            </Principal>
+            <Dependent Role="Registrations">
+              <PropertyRef Name="ProductCode" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="TechSupportModelStoreContainer" CdmEntityContainer="TechSupportEntities">
+          <EntitySetMapping Name="Customers">
+            <EntityTypeMapping TypeName="TechSupportModel.Customer">
+              <MappingFragment StoreEntitySet="Customers">
+                <ScalarProperty Name="CustomerID" ColumnName="CustomerID" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="City" ColumnName="City" />
+                <ScalarProperty Name="State" ColumnName="State" />
+                <ScalarProperty Name="ZipCode" ColumnName="ZipCode" />
+                <ScalarProperty Name="Phone" ColumnName="Phone" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Incidents">
+            <EntityTypeMapping TypeName="TechSupportModel.Incident">
+              <MappingFragment StoreEntitySet="Incidents">
+                <ScalarProperty Name="IncidentID" ColumnName="IncidentID" />
+                <ScalarProperty Name="CustomerID" ColumnName="CustomerID" />
+                <ScalarProperty Name="ProductCode" ColumnName="ProductCode" />
+                <ScalarProperty Name="TechID" ColumnName="TechID" />
+                <ScalarProperty Name="DateOpened" ColumnName="DateOpened" />
+                <ScalarProperty Name="DateClosed" ColumnName="DateClosed" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Products">
+            <EntityTypeMapping TypeName="TechSupportModel.Product">
+              <MappingFragment StoreEntitySet="Products">
+                <ScalarProperty Name="ProductCode" ColumnName="ProductCode" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Version" ColumnName="Version" />
+                <ScalarProperty Name="ReleaseDate" ColumnName="ReleaseDate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Registrations">
+            <EntityTypeMapping TypeName="TechSupportModel.Registration">
+              <MappingFragment StoreEntitySet="Registrations">
+                <ScalarProperty Name="CustomerID" ColumnName="CustomerID" />
+                <ScalarProperty Name="ProductCode" ColumnName="ProductCode" />
+                <ScalarProperty Name="RegistrationDate" ColumnName="RegistrationDate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="States">
+            <EntityTypeMapping TypeName="TechSupportModel.State">
+              <MappingFragment StoreEntitySet="States">
+                <ScalarProperty Name="StateCode" ColumnName="StateCode" />
+                <ScalarProperty Name="StateName" ColumnName="StateName" />
+                <ScalarProperty Name="FirstZipCode" ColumnName="FirstZipCode" />
+                <ScalarProperty Name="LastZipCode" ColumnName="LastZipCode" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Technicians">
+            <EntityTypeMapping TypeName="TechSupportModel.Technician">
+              <MappingFragment StoreEntitySet="Technicians">
+                <ScalarProperty Name="TechID" ColumnName="TechID" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Phone" ColumnName="Phone" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="True" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
